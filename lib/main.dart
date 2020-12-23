@@ -9,7 +9,10 @@ class MyApp extends StatelessWidget {
     // final wordPair = new WordPair.random();
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Welcome to Flutter',
+      title: 'StartUp Name Generator',
+      theme: new ThemeData(
+        primaryColor: Colors.white,
+      ),
       home: new RandomWords(),
     );
   }
@@ -23,16 +26,47 @@ class RandomWords extends StatefulWidget {
 class RandomWordState extends State<RandomWords> {
   final wordPair = new WordPair.random();
   final _suggestions = <WordPair>[];
-  final _fountSize = const TextStyle(fontSize: 18.0);
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _saved = new Set<WordPair>();
 
   @override
   Widget build(BuildContext context) {
     // return new Text(wordPair.asPascalCase);
+    void _pushSaved() {
+      Navigator.of(context).push(
+        new MaterialPageRoute(
+          builder: (context) {
+            final tiles = _saved.map((wordPair) {
+              return new ListTile(
+                title: new Text(
+                  wordPair.asPascalCase,
+                  style: _biggerFont,
+                ),
+              );
+            });
+            final divided = ListTile.divideTiles(
+              tiles: tiles,
+              context: context,
+            ).toList();
+            return new Scaffold(
+              appBar: new AppBar(
+                title: new Text("Saved Suggestions"),
+              ),
+              body: new ListView(
+                children: divided,
+              ),
+            );
+          },
+        ),
+      );
+    }
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('StartUp Name Generator'),
+        actions: <Widget>[
+          new IconButton(icon: new Icon(Icons.list), onPressed: _pushSaved)
+        ],
       ),
       body: _buildSuggestions(),
     );
