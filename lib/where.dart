@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:zFlutter_demo/where.dart';
 
-void main() => runApp(new MyApp());
+// void main() => runApp(new WhereApp());
 
 // ignore: must_be_immutable
-class MyApp extends StatelessWidget {
+class WhereApp extends StatelessWidget {
   // ignore: slash_for_doc_comments
   @override
   Widget build(BuildContext context) {
@@ -126,16 +125,6 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
                 fontSize: 16.0,
-              );
-            },
-          ),
-          RaisedButton(
-            child: buildButtonColumn(Icons.map, 'MAP'),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => new WhereApp(),
-                ),
               );
             },
           ),
