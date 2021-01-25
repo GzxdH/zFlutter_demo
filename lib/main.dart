@@ -9,7 +9,51 @@ class MyApp extends StatelessWidget {
   // ignore: slash_for_doc_comments
   @override
   Widget build(BuildContext context) {
-    Widget titleSection = new Container(
+    return new MaterialApp(
+        title: 'TOT',
+        theme: new ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        routes: {
+          "where": (context) => WhereApp(),
+        },
+        home: HomePage());
+  }
+}
+
+class HomePage extends StatefulWidget {
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    Column buildButtonColumn(IconData icon, String label) {
+      Color color = Theme.of(context).primaryColor;
+      return new Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Icon(
+            icon,
+            color: color,
+          ),
+          new Container(
+            margin: const EdgeInsets.only(top: 8.0),
+            child: new Text(
+              label,
+              style: new TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w400,
+                color: color,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget titleSection = Container(
       padding: const EdgeInsets.all(32.0),
       child: new Row(
         children: <Widget>[
@@ -44,43 +88,7 @@ class MyApp extends StatelessWidget {
       ),
     );
 
-    Column buildButtonColumn(IconData icon, String label) {
-      Color color = Theme.of(context).primaryColor;
-      return new Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Icon(
-            icon,
-            color: color,
-          ),
-          new Container(
-            margin: const EdgeInsets.only(top: 8.0),
-            child: new Text(
-              label,
-              style: new TextStyle(
-                fontSize: 12.0,
-                fontWeight: FontWeight.w400,
-                color: color,
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
-    /**
-     * Fluttertoast.showToast(
-        msg: "This is Center Short Toast",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-        );
-     */
-    Widget buttonSection = new Container(
+    Widget buttonSection = Container(
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -132,18 +140,14 @@ class MyApp extends StatelessWidget {
           RaisedButton(
             child: buildButtonColumn(Icons.map, 'MAP'),
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => new WhereApp(),
-                ),
-              );
+              Navigator.pushNamed(context, "where");
             },
           ),
         ],
       ),
     );
 
-    Widget textSection = new Container(
+    Widget textSection = Container(
       padding: new EdgeInsets.all(32.0),
       child: new Text(
         '''
@@ -153,25 +157,19 @@ Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situate
       ),
     );
 
-    return new MaterialApp(
-      title: 'TOT',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: new Scaffold(
-        body: new ListView(
-          children: <Widget>[
-            new Image.asset(
-              'images/lake.jpg',
-              width: 600.0,
-              height: 240.0,
-              fit: BoxFit.cover,
-            ),
-            titleSection,
-            buttonSection,
-            textSection,
-          ],
-        ),
+    return new Scaffold(
+      body: new ListView(
+        children: <Widget>[
+          new Image.asset(
+            'images/lake.jpg',
+            width: 600.0,
+            height: 240.0,
+            fit: BoxFit.cover,
+          ),
+          titleSection,
+          buttonSection,
+          textSection,
+        ],
       ),
     );
   }
