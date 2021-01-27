@@ -43,14 +43,14 @@ class HttpSetting {
         // 不使用http状态码判断状态，使用AdapterInterceptor来处理（适用于标准REST风格）
         return true;
       },
-      baseUrl: BaseUrl.BASE_URL,
+      baseUrl: url,
     );
     try {
       if (dio == null) {
         dio = new Dio(options);
       }
       dio.options.headers = httpHeaders;
-      dio.interceptors.add(LogInterceptor(responseBody: false)); //开启请求日志
+      dio.interceptors.add(LogInterceptor(responseBody: true)); //开启请求日志
       Response response;
       if (method == 'GET') {
         if (parameters == null) {

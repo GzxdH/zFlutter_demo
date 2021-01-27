@@ -1,5 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:zFlutter_demo/common/BaseUrl.dart';
+import 'package:zFlutter_demo/http/HttpSetting.dart';
+
+import 'entity/BannerEntity.dart';
 
 // void main() => runApp(new WhereApp());
 
@@ -57,11 +62,33 @@ class WherePage_ extends State<WherePage> {
         ),
         Expanded(
           flex: 1,
-          child: new Image.asset(
-            'images/depositphot3.jpg',
-            width: 100.0,
-            height: 100.0,
-            fit: BoxFit.cover,
+          child: new GestureDetector(
+            child: new Image.asset(
+              'images/depositphot3.jpg',
+              width: 100.0,
+              height: 100.0,
+              fit: BoxFit.cover,
+            ),
+            onTap: () => {
+              Fluttertoast.showToast(
+                msg: BaseUrl.BASE_URL + BaseUrl.HOME_BANNER,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.blue,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              ),
+              HttpSetting.requestHttp<BannerEntity>(
+                BaseUrl.BASE_URL + BaseUrl.HOME_BANNER,
+                // parameters: null,
+                // method: 'GET',
+                // data: null,
+                // contentType: 'JSON',
+                // onSuccess(bannerEntity:BannerEntity){},
+                // onError: '',
+              )
+            },
           ),
         ),
         SizedBox(
