@@ -123,7 +123,13 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          RaisedButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24.0)),
+              padding: const EdgeInsets.all(12.0),
+              primary: Colors.amber,
+            ),
             child: buildButtonColumn(Icons.share, 'SHARE'),
             onPressed: () {
               Fluttertoast.showToast(
@@ -137,7 +143,13 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          RaisedButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              padding: const EdgeInsets.all(12.0),
+              primary: Colors.cyanAccent,
+            ),
             child: buildButtonColumn(Icons.map, 'MAP'),
             onPressed: () {
               Navigator.pushNamed(context, "where");
