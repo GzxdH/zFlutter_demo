@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:zFlutter_demo/MusicHome.dart';
 import 'package:zFlutter_demo/common/BaseUrl.dart';
 import 'package:zFlutter_demo/http/HttpSetting.dart';
 
@@ -18,6 +19,9 @@ class WhereApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
+      routes: {
+        "mHome": (context) => MusicHomeApp(),
+      },
       home: WherePage(),
     );
   }
@@ -29,74 +33,77 @@ class WherePage extends StatefulWidget {
 
 // ignore: camel_case_types
 class WherePage_ extends State<WherePage> {
-  Widget horizontalSection = new Center(
-    child: new Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        SizedBox(
-          width: 10.0,
-        ),
-        Expanded(
-          flex: 1,
-          child: new Image.asset(
-            'images/depositphot1.jpg',
-            width: 100.0,
-            height: 100.0,
-            fit: BoxFit.cover,
-          ),
-        ),
-        SizedBox(
-          width: 10.0,
-        ),
-        Expanded(
-          flex: 1,
-          child: new Image.asset(
-            'images/depositphot2.jpg',
-            width: 100.0,
-            height: 100.0,
-            fit: BoxFit.cover,
-          ),
-        ),
-        SizedBox(
-          width: 10.0,
-        ),
-        Expanded(
-          flex: 1,
-          child: new GestureDetector(
-            child: new Image.asset(
-              'images/depositphot3.jpg',
-              width: 100.0,
-              height: 100.0,
-              fit: BoxFit.cover,
+  Widget horizontalSection(BuildContext context) => new Center(
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            SizedBox(
+              width: 10.0,
             ),
-            onTap: () => {
-              Fluttertoast.showToast(
-                msg: BaseUrl.BASE_URL + BaseUrl.HOME_BANNER,
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.blue,
-                textColor: Colors.white,
-                fontSize: 16.0,
+            Expanded(
+              flex: 1,
+              child: new GestureDetector(
+                child: new Image.asset(
+                  'images/depositphot1.jpg',
+                  width: 100.0,
+                  height: 100.0,
+                  fit: BoxFit.cover,
+                ),
+                onTap: () => {Navigator.pushNamed(context, "mHome")},
               ),
-              HttpSetting.requestHttp<BannerEntity>(
-                BaseUrl.BASE_URL + BaseUrl.HOME_BANNER,
-                // parameters: null,
-                // method: 'GET',
-                // data: null,
-                // contentType: 'JSON',
-                // onSuccess(bannerEntity:BannerEntity){},
-                // onError: '',
-              )
-            },
-          ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              flex: 1,
+              child: new Image.asset(
+                'images/depositphot2.jpg',
+                width: 100.0,
+                height: 100.0,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              flex: 1,
+              child: new GestureDetector(
+                child: new Image.asset(
+                  'images/depositphot3.jpg',
+                  width: 100.0,
+                  height: 100.0,
+                  fit: BoxFit.cover,
+                ),
+                onTap: () => {
+                  Fluttertoast.showToast(
+                    msg: BaseUrl.BASE_URL + BaseUrl.HOME_BANNER,
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.blue,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  ),
+                  HttpSetting.requestHttp<BannerEntity>(
+                    BaseUrl.BASE_URL + BaseUrl.HOME_BANNER,
+                    // parameters: null,
+                    // method: 'GET',
+                    // data: null,
+                    // contentType: 'JSON',
+                    // onSuccess(bannerEntity:BannerEntity){},
+                    // onError: '',
+                  )
+                },
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+          ],
         ),
-        SizedBox(
-          width: 10.0,
-        ),
-      ],
-    ),
-  );
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +119,7 @@ class WherePage_ extends State<WherePage> {
           SizedBox(
             height: 10.0,
           ),
-          horizontalSection,
+          horizontalSection(context),
         ],
       ),
     );
