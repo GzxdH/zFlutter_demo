@@ -5,8 +5,6 @@ import 'package:zFlutter_demo/MusicHome.dart';
 import 'package:zFlutter_demo/common/BaseUrl.dart';
 import 'package:zFlutter_demo/http/HttpSetting.dart';
 
-import 'entity/BannerEntity.dart';
-
 // void main() => runApp(new WhereApp());
 
 // ignore: must_be_immutable
@@ -86,15 +84,6 @@ class WherePage_ extends State<WherePage> {
                     textColor: Colors.white,
                     fontSize: 16.0,
                   ),
-                  HttpSetting.requestHttp<BannerEntity>(
-                    BaseUrl.BASE_URL + BaseUrl.HOME_BANNER,
-                    // parameters: null,
-                    // method: 'GET',
-                    // data: null,
-                    // contentType: 'JSON',
-                    // onSuccess(bannerEntity:BannerEntity){},
-                    // onError: '',
-                  )
                 },
               ),
             ),
