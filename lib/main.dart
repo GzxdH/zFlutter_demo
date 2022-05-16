@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zFlutter_demo/where.dart';
 
@@ -17,7 +18,9 @@ class MyApp extends StatelessWidget {
         routes: {
           "where": (context) => WhereApp(),
         },
-        home: HomePage());
+        home: HomePage(),
+        builder: EasyLoading.init(),
+    );
   }
 }
 

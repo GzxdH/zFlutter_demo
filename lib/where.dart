@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zFlutter_demo/MusicHome.dart';
 import 'package:zFlutter_demo/common/BaseUrl.dart';
-import 'package:zFlutter_demo/http/HttpSetting.dart';
 
 // void main() => runApp(new WhereApp());
 
