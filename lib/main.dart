@@ -1,9 +1,24 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:zFlutter_demo/where.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:zFlutter_demo/common/LoginUtil.dart';
+
+import 'entity/BannerEntity.dart';
+import 'http/Loading.dart';
+import 'http/UrlPath.dart';
 
 void main() => runApp(new MyApp());
+
+final tp = [
+  "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic01.1sucai.com%2F180115%2F330814-1P11516240997.jpg&refer=http%3A%2F%2Fpic01.1sucai.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654759337&t=7562e72802b6ac060fdf7bd9205d14a6",
+  "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1114%2F0G020114924%2F200G0114924-15-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1655000281&t=3b3b2d4d39c30d4c7841d9e9f676fbc3",
+  "https://img2.baidu.com/it/u=1572613686,938558453&fm=253&fmt=auto&app=120&f=JPEG?w=640&h=400"
+];
+
+var bannerUrl = [];
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
@@ -11,15 +26,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-        title: 'TOT',
-        theme: new ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        routes: {
-          "where": (context) => WhereApp(),
-        },
-        home: HomePage(),
-        builder: EasyLoading.init(),
+      title: 'TOT',
+      theme: new ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      // routes: {
+      //   "where": (context) => WhereApp(),
+      // },
+      home: HomePage(),
+      builder: EasyLoading.init(),
     );
   }
 }
@@ -29,163 +44,90 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ///轮播接口
+  void getHttp() async {
+    try {
+      Loading.show();
+      BaseOptions baseOptions = new BaseOptions(
+          connectTimeout: 1000 * 10,
+          receiveTimeout: 1000 * 5,
+          responseType: ResponseType.plain);
+      Dio dio = new Dio(baseOptions);
+      Response response = await dio.get(UrlPath.baseUrl + UrlPath.bannerPath);
+      if (response != null) {
+        Loading.dismiss();
+        if (response.statusCode == 200) {
+          Map<String, dynamic> res2Json = jsonDecode(response.data);
+          BannerEntity bannerEntity = BannerEntity.fromJson(res2Json);
+          for (int i = 0; i < bannerEntity.banners.length; i++) {
+            bannerUrl.add(bannerEntity.banners[i].imageUrl);
+          }
+        } else {
+          print(response.statusMessage);
+        }
+      }
+    } catch (e) {
+      Loading.dismiss();
+      print(e);
+    }
+  }
+
+  ///轮播视图
+  Widget bannerSection = Container(
+    height: 200,
+    child: new Swiper(
+      itemBuilder: (BuildContext context, int index) {
+        return new Image.network(
+          bannerUrl[index],
+          fit: BoxFit.fill,
+        );
+      },
+      itemHeight: 200,
+      itemCount: bannerUrl.length,
+      pagination: new SwiperPagination(),
+      control: new SwiperControl(),
+      // autoplay: true,
+    ),
+  );
+
+  ///标签视图
+  Widget tabSection = Container(
+      height: 100,
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        //交叉轴的布局方式，对于column来说就是水平方向的布局方式
+        crossAxisAlignment: CrossAxisAlignment.center,
+        //就是字child的垂直布局方向，向上还是向下
+        verticalDirection: VerticalDirection.down,
+        children: [
+          GestureDetector(child: Text('标签一')),
+          Text('标签二'),
+          Text('标签三'),
+        ],
+      ));
+
   @override
   Widget build(BuildContext context) {
-    Column buildButtonColumn(IconData icon, String label) {
-      Color color = Theme.of(context).primaryColor;
-      return new Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Icon(
-            icon,
-            color: color,
-          ),
-          new Container(
-            margin: const EdgeInsets.only(top: 8.0),
-            child: new Text(
-              label,
-              style: new TextStyle(
-                fontSize: 12.0,
-                fontWeight: FontWeight.w400,
-                color: color,
-              ),
+    getHttp();
+    if (bannerUrl.length == 0) {
+      return new Container(
+        child: Text('加载中……'),
+      );
+    } else {
+      LogUtil.d(bannerUrl[0]);
+      return new Scaffold(
+        body: new ListView(
+          children: [
+            bannerSection,
+            SizedBox(
+              height: 10.0,
             ),
-          ),
-        ],
+            tabSection,
+          ],
+        ),
       );
     }
-
-    Widget titleSection = Container(
-      padding: const EdgeInsets.all(32.0),
-      child: new Row(
-        children: <Widget>[
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Container(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: new Text(
-                    'Oeschinen Lake Campground',
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                new Text(
-                  'Kandersteg, Switzerland',
-                  style: new TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          new Icon(
-            Icons.star,
-            color: Colors.red[500],
-          ),
-          new Text('41'),
-        ],
-      ),
-    );
-
-    Widget buttonSection = Container(
-      child: new Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          // buildButtonColumn(Icons.call, 'CALL'),
-          // buildButtonColumn(Icons.near_me, 'ROUTE'),
-          // buildButtonColumn(Icons.share, 'SHARE'),
-          InkWell(
-            child: buildButtonColumn(Icons.call, 'CALL'),
-            onTap: () {
-              Fluttertoast.showToast(
-                msg: 'CALL',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
-            },
-          ),
-          GestureDetector(
-            child: buildButtonColumn(Icons.near_me, 'ROUTE'),
-            onTap: () {
-              Fluttertoast.showToast(
-                msg: 'ROUTE',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.yellow,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
-            },
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24.0)),
-              padding: const EdgeInsets.all(12.0),
-              primary: Colors.amber,
-            ),
-            child: buildButtonColumn(Icons.share, 'SHARE'),
-            onPressed: () {
-              Fluttertoast.showToast(
-                msg: 'SHARE',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.blue,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
-            },
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
-              padding: const EdgeInsets.all(12.0),
-              primary: Colors.cyanAccent,
-            ),
-            child: buildButtonColumn(Icons.map, 'MAP'),
-            onPressed: () {
-              Navigator.pushNamed(context, "where");
-            },
-          ),
-        ],
-      ),
-    );
-
-    Widget textSection = Container(
-      padding: new EdgeInsets.all(32.0),
-      child: new Text(
-        '''
-Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. Situated 1,578 meters above sea level, it is one of the larger Alpine Lakes. A gondola ride from Kandersteg, followed by a half-hour walk through pastures and pine forest, leads you to the lake, which warms to 20 degrees Celsius in the summer. Activities enjoyed here include rowing, and riding the summer toboggan run.
-        ''',
-        softWrap: true,
-      ),
-    );
-
-    return new Scaffold(
-      body: new ListView(
-        children: <Widget>[
-          new Image.asset(
-            'images/lake.jpg',
-            width: 600.0,
-            height: 240.0,
-            fit: BoxFit.cover,
-          ),
-          titleSection,
-          buttonSection,
-          textSection,
-        ],
-      ),
-    );
   }
 }
