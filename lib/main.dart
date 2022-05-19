@@ -117,14 +117,27 @@ class _HomePageState extends State<HomePage> {
     return new Swiper(
       // autoplay: true,
       itemBuilder: (BuildContext context, int index) {
-        return new Image.network(
-          _bannerUrl[index],
-          fit: BoxFit.fitHeight,
-        );
+        return FadeInImage(
+            width: 100,
+            fit: BoxFit.fill,
+            placeholder: NetworkImage(tp[0]),
+            image: NetworkImage(_bannerUrl[index]));
       },
+      containerHeight: 300,
+      itemHeight: 300,
       itemCount: _bannerUrl.length,
       viewportFraction: 0.8,
       scale: 0.9,
+      onTap: (index) => {
+        Fluttertoast.showToast(
+            msg: bannerUrl[index],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0)
+      },
     );
   }
 
@@ -151,12 +164,15 @@ class _HomePageState extends State<HomePage> {
             }
             return ListView(children: [
               Container(
+                height: 300,
                 child: imageSlider(bannerUrl),
               )
             ]);
           }
           //请求未完成时弹出loading
-          return Loading.show();
+          return Container(
+            child: Loading.show(),
+          );
         },
       ),
     );
