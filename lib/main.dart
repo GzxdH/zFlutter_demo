@@ -119,12 +119,12 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (BuildContext context, int index) {
         return FadeInImage(
             width: 100,
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
             placeholder: NetworkImage(tp[0]),
             image: NetworkImage(_bannerUrl[index]));
       },
-      containerHeight: 300,
-      itemHeight: 300,
+      containerHeight: 200,
+      itemHeight: 200,
       itemCount: _bannerUrl.length,
       viewportFraction: 0.8,
       scale: 0.9,
@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> {
             }
             return ListView(children: [
               Container(
-                height: 300,
+                height: 200,
                 child: imageSlider(bannerUrl),
               )
             ]);
